@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.webcam-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#webcam {
+    max-width: 100%;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.stat p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
