@@ -3,31 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam and Environmental Statistics</title>
+    <title>Sensor Data and Camera Feed</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Webcam and Environmental Statistics</h1>
-        <div class="webcam-container">
-            <video id="webcam" autoplay></video>
+        <h1>Sensor Data and Camera Feed</h1>
+        
+        <div class="camera-container">
+            <video id="cameraFeed" autoplay></video>
         </div>
-        <div class="stats-container">
-            <div class="stat">
-                <h2>pH Level</h2>
-                <p id="phValue">7.0</p>
+        
+        <div id="sensorCards" class="cards-container">
+            <!-- Dummy sensor data cards -->
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>Temperature</h2>
+                </div>
+                <div class="card-body">
+                    <p>0 °C</p>
+                </div>
             </div>
-            <div class="stat">
-                <h2>Temperature</h2>
-                <p id="temperatureValue">25°C</p>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>pH</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
             </div>
-            <div class="stat">
-                <h2>Turbidity</h2>
-                <p id="turbidityValue">10 NTU</p>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>Turbidity</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
+            </div>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>Ultrasonic 1</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
+            </div>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>Ultrasonic 2</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
+            </div>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>TDS</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
+            </div>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>Pressure</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
+            </div>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>GPS Latitude</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
+            </div>
+            <div class="sensor-card">
+                <div class="card-header">
+                    <h2>GPS Longitude</h2>
+                </div>
+                <div class="card-body">
+                    <p>0</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        async function fetchSensorData() {
+            const response = await fetch('fetch_data.php');
+            const data = await response.json();
+            const cardsContainer = document.getElementById('sensorCards');
+            const sensorTypes = ['temperature', 'ph', 'turbidity', 'ultrasonic1', 'ultrasonic2', 'tds', 'pressure', 'gps_lat', 'gps_lon'];
+            const sensorNames = ['Temperature', 'pH', 'Turbidity', 'Ultrasonic 1', 'Ultrasonic 2', 'TDS', 'Pressure', 'GPS Latitude', 'GPS Longitude'];
+            cardsContainer.innerHTML = ''; // Clear the dummy cards
+            sensorTypes.forEach((type, index) => {
+                const value = data[0][type]; // Assuming data[0] is the latest data entry
+                const card = document.createElement('div');
+                card.className = 'sensor-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h2>${sensorNames[index]}</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>${value} ${type.includes('gps') ? '' : type === 'temperature' ? '°C' : ''}</p>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
+            });
+        }
+
+        async function startCameraFeed() {
+            const videoElement = document.getElementById('cameraFeed');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+            } catch (error) {
+                console.error('Error accessing camera: ', error);
+            }
+        }
+
+        setInterval(fetchSensorData, 5000);
+        fetchSensorData();
+        startCameraFeed();
+    </script>
 </body>
 </html>

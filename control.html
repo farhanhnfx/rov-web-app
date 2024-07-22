@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROV Controller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        #controls div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ROV Controller</h1>
+    <p id="status">Connect a gamepad and press any button to start...</p>
+    <div id="controls">
+        <div>Forward: <span id="forward"></span></div>
+        <div>Right: <span id="right"></span></div>
+        <div>Left: <span id="left"></span></div>
+        <div>Up: <span id="up"></span></div>
+        <div>Down: <span id="down"></span></div>
+    </div>
+    <script>
+        window.addEventListener("gamepadconnected", (event) => {
+            const gamepad = event.gamepad;
+            document.getElementById('status').innerText = `Gamepad connected: ${gamepad.id}`;
+            console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+                gamepad.index, gamepad.id,
+                gamepad.buttons.length, gamepad.axes.length);
+
+            // Start the update loop
+            setInterval(() => updateLoop(gamepad.index), 100);
+        });
+
+        window.addEventListener("gamepaddisconnected", (event) => {
+            document.getElementById('status').innerText = "Gamepad disconnected.";
+            console.log("Gamepad disconnected from index %d: %s",
+                event.gamepad.index, event.gamepad.id);
+        });
+
+        function updateLoop(index) {
+            const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+            const gp = gamepads[index];
+            if (!gp) return;
+
+            // Ensure the gamepad has at least 16 buttons and 4 axes
+            const forward = gp.axes[1] !== undefined ? gp.axes[1] == -1 : false;
+            const backward = gp.axes[1] !== undefined ? gp.axes[1] == 1 : false;
+            const left = gp.axes[0] !== undefined ? gp.axes[0] == -1 : false;
+            const right = gp.axes[0] !== undefined ? gp.axes[0] == 1 : false;
+            const up = gp.buttons[0] ? gp.buttons[0].pressed : false;
+            const down = gp.buttons[2] ? gp.buttons[2].pressed : false;
+
+            document.getElementById('forward').innerText = forward ? "Pressed" : "Not pressed";
+            document.getElementById('right').innerText = right ? "Pressed" : "Not pressed";
+            document.getElementById('left').innerText = left ? "Pressed" : "Not pressed";
+            document.getElementById('up').innerText = up ? "Pressed" : "Not pressed";
+            document.getElementById('down').innerText = down ? "Pressed" : "Not pressed";
+
+            if (forward) {
+                if (right) {
+                    fetch('/control_listener.php?input=e');
+                }
+                else if (left) {
+                    fetch('/control_listener.php?input=q');
+                }
+                else {
+                    fetch('/control_listener.php?input=w');
+                }
+            }
+            else if (right) {
+                fetch('/control_listener.php?input=d');
+            }
+            else if (left) {
+                fetch('/control_listener.php?input=a');
+            }
+            else if (up) {
+                fetch('/control_listener.php?input=x');
+            }
+            else if (down) {
+                fetch('/control_listener.php?input=z');
+            }
+            else {
+                fetch('/control_listener.php?input=n');
+            }
+        }
+    </script>
+</body>
+</html>

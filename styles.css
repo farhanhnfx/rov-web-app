@@ -1,51 +1,81 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    color: #333;
 }
 
 .container {
-    max-width: 800px;
-    margin: 20px auto;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    color: #4CAF50;
 }
 
-.webcam-container {
+.camera-container {
     text-align: center;
     margin-bottom: 20px;
 }
 
-#webcam {
-    max-width: 100%;
+video {
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.stats-container {
+.cards-container {
     display: flex;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-.stat {
+.sensor-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 25%;
     text-align: center;
-    padding: 20px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.stat h2 {
-    margin-top: 0;
-    font-size: 1.2rem;
+.card-header {
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 15px;
+    text-align: center;
 }
 
-.stat p {
-    font-size: 1.5rem;
+.card-body {
+    padding: 15px;
+}
+
+.card-body p {
+    margin: 10px 0;
+    font-size: 1.2em;
     font-weight: bold;
-    color: #333;
+}
+
+@media (max-width: 768px) {
+    .sensor-card {
+        width: 100%;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .sensor-card {
+        width: 45%;
+    }
 }
